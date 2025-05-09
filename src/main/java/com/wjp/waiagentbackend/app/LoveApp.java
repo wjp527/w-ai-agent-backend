@@ -137,6 +137,9 @@ public class LoveApp {
     @Resource
     private Advisor loveAppRegCloudAdvisor;
 
+    @Resource
+    private VectorStore pgVectorVectorStore;
+
     /**
      * AI 恋爱报告功能（实战结构化输出）
      * @param message
@@ -154,7 +157,9 @@ public class LoveApp {
                 // 应用 RAG 知识库问答
 //                .advisors(new QuestionAnswerAdvisor(loveAppVectorStore))
                 // 应用 RAG 检索增强服务[基于云服务]
-                .advisors(loveAppRegCloudAdvisor)
+//                .advisors(loveAppRegCloudAdvisor)
+                // 应用 RAG 检索增强服务[基于 PgVector 向量存储]
+                .advisors(new QuestionAnswerAdvisor(pgVectorVectorStore))
                 .call()
                 .chatResponse();
 

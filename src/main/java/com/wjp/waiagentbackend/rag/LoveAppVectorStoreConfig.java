@@ -26,7 +26,7 @@ public class LoveAppVectorStoreConfig {
      * @return
      */
     @Bean
-    VectorStore LoveAppVectorStore(EmbeddingModel dashscopeEmbeddingModel) {
+    public VectorStore LoveAppVectorStore(EmbeddingModel dashscopeEmbeddingModel) {
         // 创建一个基于内存的向量存储对象
         SimpleVectorStore simpleVectorStore = SimpleVectorStore.builder(dashscopeEmbeddingModel).build();
         // 加载所有Markdown文档
