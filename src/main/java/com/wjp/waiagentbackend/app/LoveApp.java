@@ -5,6 +5,8 @@ import com.wjp.waiagentbackend.advisor.MyLoggerAdvisor;
 import com.wjp.waiagentbackend.advisor.ProhibitedWordsAdvisor;
 import com.wjp.waiagentbackend.advisor.ReReadingAdvisor;
 import com.wjp.waiagentbackend.chatmemory.FileBasedChatMemory;
+import com.wjp.waiagentbackend.rag.LoveAppRagCustomAdvisorFactory;
+import com.wjp.waiagentbackend.rag.QueryReWriter;
 import dev.langchain4j.model.input.PromptTemplate;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -140,6 +142,8 @@ public class LoveApp {
     @Resource
     private VectorStore pgVectorVectorStore;
 
+    @Resource
+    private QueryReWriter queryReWriter;
     /**
      * AI 恋爱报告功能（实战结构化输出）
      * @param message
@@ -147,19 +151,31 @@ public class LoveApp {
      * @return
      */
     public String doChatWithRag(String message, String chatId) {
+        // 重写对话信息
+        String rewrittenMessage = queryReWriter.doQueryRewrite(message);
         ChatResponse response = chatClient
                 .prompt()
-                .user(message)
+                // 设置用户的消息内容
+                .user(rewrittenMessage)
                 // 设置对话的参数，包括聊天的ID和检索对话历史的大小【支持多轮对话】
                 .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId).param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10))
                 // 开启自定义日志
                 .advisors(new MyLoggerAdvisor())
-                // 应用 RAG 知识库问答
+                // 应用 RAG 知识库问答[基于本地]
 //                .advisors(new QuestionAnswerAdvisor(loveAppVectorStore))
                 // 应用 RAG 检索增强服务[基于云服务]
 //                .advisors(loveAppRegCloudAdvisor)
                 // 应用 RAG 检索增强服务[基于 PgVector 向量存储]
-                .advisors(new QuestionAnswerAdvisor(pgVectorVectorStore))
+//                .advisors(new QuestionAnswerAdvisor(pgVectorVectorStore))
+                // 应用自定义的 RAG检索增强服务[文档查询器 + 上下文检索器]
+                .advisors(
+                        LoveAppRagCustomAdvisorFactory.createLoveAppRagCustomAdvisor(
+                                // 本地向量存储
+                                loveAppVectorStore,
+                                // 检索条件
+                                "单身"
+                        )
+                )
                 .call()
                 .chatResponse();
 

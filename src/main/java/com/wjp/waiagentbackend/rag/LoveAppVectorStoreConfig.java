@@ -20,6 +20,12 @@ public class LoveAppVectorStoreConfig {
     @Resource
     private LoveAppDocumentLoader loveAppDocumentLoader;
 
+    @Resource
+    private MyTokenTextSplitter myTokenTextSplitter;
+
+    @Resource
+    private MyKeywordEnricher myKeywordEnricher;
+
     /**
      * 创建一个VectorStore对象，用于存储所有解析后的Document对象
      * @param dashscopeEmbeddingModel
@@ -31,8 +37,15 @@ public class LoveAppVectorStoreConfig {
         SimpleVectorStore simpleVectorStore = SimpleVectorStore.builder(dashscopeEmbeddingModel).build();
         // 加载所有Markdown文档
         List<Document> documentList = loveAppDocumentLoader.loadMarkdowns();
+
+        // 自主切片文档
+//        List<Document> splitDocuments = myTokenTextSplitter.splitCustomized(documentList);
+
+        // 自主添加关键词
+        List<Document> enrichedDocuments = myKeywordEnricher.enrichDocuments(documentList);
+
         // 将所有文档添加到向量存储中
-        simpleVectorStore.add(documentList);
+        simpleVectorStore.add(enrichedDocuments);
         return simpleVectorStore;
 
     }

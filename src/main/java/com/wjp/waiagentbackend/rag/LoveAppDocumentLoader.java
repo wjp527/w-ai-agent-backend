@@ -41,11 +41,13 @@ public class LoveAppDocumentLoader {
         try {
             // 获取类路径下document目录中的所有Markdown文件
             Resource[] resources = resourcePatternResolver.getResources("classpath:document/*.md");
-
+            
             // 遍历每个Markdown文件
             for (Resource resource : resources) {
                 // 获取文件名【后续进行添加标识】
                 String filename = resource.getFilename();
+                // 获取文档的标签
+                String status = filename.substring(filename.length() - 6, filename.length() - 4);
                 // 创建一个MarkdownDocumentReaderConfig对象，并设置一些配置选项
                 MarkdownDocumentReaderConfig config = MarkdownDocumentReaderConfig.builder()
                         // 是否包含
@@ -54,8 +56,9 @@ public class LoveAppDocumentLoader {
                         .withIncludeCodeBlock(false)
                         // 是否包含引用块
                         .withIncludeBlockquote(false)
-                        // 添加元数据
+                        // 添加元数据(打标签)
                         .withAdditionalMetadata("filename", filename)
+                        .withAdditionalMetadata("status", status)
                         //
                         .build();
 
