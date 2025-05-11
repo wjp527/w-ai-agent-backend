@@ -11,6 +11,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
@@ -129,12 +130,16 @@ public class LoveApp {
     /**
      * AI 恋爱知识库问答功能
      */
+
+
     @Resource
     private VectorStore loveAppVectorStore;
 
+    // RAG知识库
     @Resource
     private Advisor loveAppRegCloudAdvisor;
 
+    // PgVector向量存储
     @Resource
     private VectorStore pgVectorVectorStore;
 
@@ -142,13 +147,19 @@ public class LoveApp {
     @Resource
     private QueryReWriter queryReWriter;
 
-    // 国际化
+    // 国际化[文本翻译]
     @Resource
     private QueryInternationalization queryInternationalization;
 
+    // 国际化[文本翻译 - SDK]
     @Resource
     private QueryInternationalizationSDK queryInternationalizationSDK;
 
+    /**
+     * 判断文本是否包含中文
+     * @param text
+     * @return
+     */
       public boolean isChinese(String text) {
       return text != null && text.matches(".*[\\u4e00-\\u9fff].*"); // 简单正则匹配中文字符
   }
@@ -193,8 +204,8 @@ public class LoveApp {
                                 // 本地向量存储
                                 loveAppVectorStore,
                                 // 检索条件
-                                "单身"
-//                                "已婚"
+//                                "单身"
+                                "已婚"
                         )
                 )
                 .call()

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 恋爱大师应用文档加载器
+ * 恋爱大师应用文档加载器 [可以打标签]
  */
 @Component
 @Slf4j

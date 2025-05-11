@@ -16,9 +16,13 @@ import java.util.List;
  */
 @Configuration
 public class LoveAppVectorStoreConfig {
-    // 注入文档加载器
+    // 注入文档加载器(Markdown文档)
     @Resource
     private LoveAppDocumentLoader loveAppDocumentLoader;
+
+    // 注入文档加载器(Word)
+    @Resource
+    private MyTikaDocumentReader myTikaDocumentReader;
 
     @Resource
     private MyTokenTextSplitter myTokenTextSplitter;
@@ -37,6 +41,8 @@ public class LoveAppVectorStoreConfig {
         SimpleVectorStore simpleVectorStore = SimpleVectorStore.builder(dashscopeEmbeddingModel).build();
         // 加载所有Markdown文档
         List<Document> documentList = loveAppDocumentLoader.loadMarkdowns();
+        // 加载所有Word文档
+//        List<Document> documentList = myTikaDocumentReader.loadWordDocuments();
 
         // 自主切片文档
 //        List<Document> splitDocuments = myTokenTextSplitter.splitCustomized(documentList);
