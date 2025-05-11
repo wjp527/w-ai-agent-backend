@@ -48,6 +48,7 @@ public class LoveAppDocumentLoader {
                 String filename = resource.getFilename();
                 // 获取文档的标签
                 String status = filename.substring(filename.length() - 6, filename.length() - 4);
+//                String status = filename.substring(filename.indexOf("-") + 1, filename.indexOf("篇"));
                 // 创建一个MarkdownDocumentReaderConfig对象，并设置一些配置选项
                 MarkdownDocumentReaderConfig config = MarkdownDocumentReaderConfig.builder()
                         // 是否包含

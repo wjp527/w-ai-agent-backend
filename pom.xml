@@ -50,6 +50,13 @@
             <version>2.19.1</version>
         </dependency>
 
+        <!-- 腾讯云文本翻译 -->
+        <dependency>
+            <groupId>com.tencentcloudapi</groupId>
+            <artifactId>tencentcloud-sdk-java-tmt</artifactId>
+            <version>LATEST</version>
+        </dependency>
+
         <!-- Spring Ai Alibaba 依赖 -->
         <dependency>
             <groupId>com.alibaba.cloud.ai</groupId>

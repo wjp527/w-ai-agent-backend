@@ -2,24 +2,20 @@ package com.wjp.waiagentbackend.app;
 
 
 import com.wjp.waiagentbackend.advisor.MyLoggerAdvisor;
-import com.wjp.waiagentbackend.advisor.ProhibitedWordsAdvisor;
-import com.wjp.waiagentbackend.advisor.ReReadingAdvisor;
 import com.wjp.waiagentbackend.chatmemory.FileBasedChatMemory;
 import com.wjp.waiagentbackend.rag.LoveAppRagCustomAdvisorFactory;
+import com.wjp.waiagentbackend.rag.QueryInternationalization;
+import com.wjp.waiagentbackend.rag.QueryInternationalizationSDK;
 import com.wjp.waiagentbackend.rag.QueryReWriter;
-import dev.langchain4j.model.input.PromptTemplate;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
-import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.prompt.SystemPromptTemplate;
+import org.springframework.ai.rag.preretrieval.query.transformation.QueryTransformer;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
 
@@ -142,8 +138,21 @@ public class LoveApp {
     @Resource
     private VectorStore pgVectorVectorStore;
 
+    // 重写查询
     @Resource
     private QueryReWriter queryReWriter;
+
+    // 国际化
+    @Resource
+    private QueryInternationalization queryInternationalization;
+
+    @Resource
+    private QueryInternationalizationSDK queryInternationalizationSDK;
+
+      public boolean isChinese(String text) {
+      return text != null && text.matches(".*[\\u4e00-\\u9fff].*"); // 简单正则匹配中文字符
+  }
+
     /**
      * AI 恋爱报告功能（实战结构化输出）
      * @param message
@@ -153,10 +162,21 @@ public class LoveApp {
     public String doChatWithRag(String message, String chatId) {
         // 重写对话信息
         String rewrittenMessage = queryReWriter.doQueryRewrite(message);
+
+        // 国际化
+//        String result = queryInternationalization.doQueryTransformer(rewrittenMessage);
+
+        String result = rewrittenMessage;
+        // 判断该 rewrittenMessage 如果不是中文进行转换
+        if (!isChinese(rewrittenMessage)) {
+            // SDK 国际化
+            result = queryInternationalizationSDK.doTextTranslation(rewrittenMessage);
+        }
+
         ChatResponse response = chatClient
                 .prompt()
                 // 设置用户的消息内容
-                .user(rewrittenMessage)
+                .user(result)
                 // 设置对话的参数，包括聊天的ID和检索对话历史的大小【支持多轮对话】
                 .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId).param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10))
                 // 开启自定义日志
@@ -174,6 +194,7 @@ public class LoveApp {
                                 loveAppVectorStore,
                                 // 检索条件
                                 "单身"
+//                                "已婚"
                         )
                 )
                 .call()
