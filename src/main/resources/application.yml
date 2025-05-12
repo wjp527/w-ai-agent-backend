@@ -14,6 +14,23 @@ spring:
       base-url: http://localhost:11434
       chat:
         model: llama3
+  # 邮件发送
+  mail:
+    host: smtp.qq.com
+    port: 465
+    username: xxx@qq.com
+    password: "xxx"  # 必须用双引号包裹
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true          # 启用SSL
+          auth: true              # 启用认证
+          connectiontimeout: 5000 # 超时设置
+          timeout: 5000
+          writetimeout: 5000
+          ssl.protocols: TLSv1.2  # 强制指定协议（关键！）
 
 server:
   port: 8123
@@ -46,3 +63,24 @@ knife4j:
 # 联网搜索 appkey https://www.searchapi.io/
 search-api:
   api-key: xxx
+
+# 对象存储
+# todo 需替换配置
+cos:
+  client:
+    accessKey: xxx
+    secretKey: xxx
+    COS_HOST: xxx
+    # 地域
+    region: xxx
+    # 存储桶名称
+    bucket: xxx
+    # 翻译来源
+    languageSource: xxx
+    # 翻译成的语言
+    languageTarget: xxx
+
+email:
+  subject: π #邮件标题
+  contentPrefix: 您好： #验证码内容前缀
+  contentSuffix: 这是一条系统通知内容。 #验证码内容后缀
