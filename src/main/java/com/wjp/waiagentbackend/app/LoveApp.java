@@ -17,6 +17,7 @@ import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.rag.preretrieval.query.transformation.QueryTransformer;
+import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
 
@@ -215,5 +216,39 @@ public class LoveApp {
         log.info("content: {}", content);
         return content;
 
+    }
+
+
+
+    // 自定义工具
+    @Resource
+    private ToolCallback[] allTools;
+    /**
+     * AI 恋爱报告功能（支持调用工具）
+     * @param message
+     * @param chatId
+     * @return
+     */
+    public String doChatWithTools(String message, String chatId) {
+        // 调用prompt方法，传入用户消息
+        ChatResponse response = chatClient
+                // 开始对话提示
+                .prompt()
+                // 设置用户的消息内容
+                .user(message)
+                // 设置对话的参数，包括聊天的ID和检索对话历史的大小
+                .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
+                        .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10)
+                )
+                .advisors(new MyLoggerAdvisor())
+                // 调用工具
+                .tools(allTools)
+                // 发送请求并获取响应
+                .call()
+                .chatResponse();
+
+        String content = response.getResult().getOutput().getText();
+        log.info("content: {}", content);
+        return content;
     }
 }
