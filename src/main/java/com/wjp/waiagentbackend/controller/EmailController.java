@@ -2,7 +2,6 @@ package com.wjp.waiagentbackend.controller;
 
 import com.wjp.waiagentbackend.common.BaseResponse;
 import com.wjp.waiagentbackend.common.ErrorCode;
-import com.wjp.waiagentbackend.common.Result;
 import com.wjp.waiagentbackend.common.ResultUtils;
 import com.wjp.waiagentbackend.config.MailConfig;
 import com.wjp.waiagentbackend.model.dto.email.MailDto;
@@ -90,14 +89,14 @@ public class EmailController {
     }
 
     @GetMapping("/getImgCode")
-    public Result imgCode(){
+    public BaseResponse imgCode(){
         //生成随机6位数字
         SecureRandom secureRandom = new SecureRandom();
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 6; i++) {
             sb.append(secureRandom.nextInt(10));
         }
-        return Result.success(sb);
+        return ResultUtils.success(sb);
     }
 
 }
