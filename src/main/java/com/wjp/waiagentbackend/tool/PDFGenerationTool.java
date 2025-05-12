@@ -34,7 +34,12 @@ public class PDFGenerationTool {
 //                PdfFont font = PdfFontFactory.createFont(fontPath,
 //                        PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
                 // 使用内置中文字体
-                PdfFont font = PdfFontFactory.createFont("STSongStd-Light", "UniGB-UCS2-H");
+//                PdfFont font = PdfFontFactory.createFont("STSongStd-Light", "UniGB-UCS2-H");
+                PdfFont font = PdfFontFactory.createFont(
+                        "C:/Windows/Fonts/simsun.ttc,0",
+                        "Identity-H",
+                        PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED // 使用枚举替代布尔值
+                );
                 document.setFont(font);
                 // 创建段落
                 Paragraph paragraph = new Paragraph(content);

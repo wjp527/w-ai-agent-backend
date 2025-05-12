@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
  */
 public enum FileUploadBizEnum {
 
+    FILE_PDF("PDF文件", "file_pdf"),
     USER_AVATAR("用户头像", "user_avatar"),
     APP_ICON("应用图标", "app_icon"),
     SCORING_RESULT_PICTURE("评分结果图片", "scoring_result_picture");
