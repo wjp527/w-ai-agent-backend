@@ -169,6 +169,11 @@
             <version>5.8.37</version>
         </dependency>
 
+        <!-- 发送邮箱的依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.springdoc</groupId>
