@@ -1,5 +1,6 @@
 package com.wjp.waiagentbackend.tool;
 
+import com.wjp.waiagentbackend.agent.ToolCallAgent;
 import jakarta.annotation.Resource;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.ToolCallbacks;
@@ -46,16 +47,18 @@ public class ToolRegisteration {
         PDFGenerationTool pdfGenerationTool = new PDFGenerationTool();
         // 发送邮箱工具
 //        EmailTool emailTool = new EmailTool(javaMailSender, from);
+        TerminateTool terminateTool = new TerminateTool();
 
         // 转换成 Spring AI能够用的工具【使用 @Tool和@ToolParam 注解】
         return ToolCallbacks.from(
-            fileOperationTool,
-            webSearchTool,
-            webScrapingTool,
-            resourceDownloadTool,
-            terminalOperationTool,
-            pdfGenerationTool,
-            emailTool
+                fileOperationTool,
+                webSearchTool,
+                webScrapingTool,
+                resourceDownloadTool,
+                terminalOperationTool,
+                pdfGenerationTool,
+                emailTool,
+                terminateTool
         );
     }
 

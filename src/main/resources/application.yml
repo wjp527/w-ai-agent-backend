@@ -14,6 +14,17 @@ spring:
       base-url: http://localhost:11434
       chat:
         model: llama3
+    mcp:
+      client:
+        # stdio模式
+        stdio:
+          servers-configuration: classpath:mcp-servers.json
+        # sse模式
+#        sse:
+#          connections:
+#            serverl:
+#              url: http://localhost:8127
+
   # 邮件发送
   mail:
     host: smtp.qq.com

@@ -43,9 +43,13 @@ public class MyLoggerAdvisor implements CallAroundAdvisor, StreamAroundAdvisor {
     }
 
     public AdvisedResponse aroundCall(AdvisedRequest advisedRequest, CallAroundAdvisorChain chain) {
+        // Call the before method of the advisor
         advisedRequest = this.before(advisedRequest);
+        // Call the nextAroundCall method of the advisor chain
         AdvisedResponse advisedResponse = chain.nextAroundCall(advisedRequest);
+        // Call the observeAfter method of the advisor
         this.observeAfter(advisedResponse);
+        // Return the advised response
         return advisedResponse;
     }
 

@@ -3,6 +3,7 @@ package com.wjp.waiagentbackend.app;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.UUID;
@@ -80,5 +81,23 @@ class LoveAppTest {
         String answer = loveApp.doChatWithTools(message, chatId);
         Assertions.assertNotNull(answer);
     }
+
+
+    /**
+     * MCP 工具调用
+     */
+    @Test
+    void doChatWithMcp() {
+//        String message = "我的另一半居住在徐州泉山区，请帮我找到5公里内合适的约会地点";
+//        String chatId = UUID.randomUUID().toString();
+//        String result = loveApp.doChatWithMcp(message, chatId);
+
+        // ======================================================================
+        String message = "Help me search for the background pictures of the anime";
+        String chatId = UUID.randomUUID().toString();
+        String result = loveApp.doChatWithMcp(message, chatId);
+        Assertions.assertNotNull(result);
+    }
+
 
 }

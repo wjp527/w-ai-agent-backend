@@ -139,6 +139,14 @@
             <version>1.0.0-M6</version>
         </dependency>
 
+        <!-- MCP服务 -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-mcp-client-spring-boot-starter</artifactId>
+            <version>1.0.0-M6</version>
+        </dependency>
+
+
         <!-- Jsoup 网页抓取 -->
         <dependency>
             <groupId>org.jsoup</groupId>
@@ -163,6 +171,7 @@
         </dependency>
 
 
+        <!-- Hutool工具库 -->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>

@@ -1,7 +1,5 @@
-### CUSTOM ###
-application-local.yml
-mcp-servers.json
-tmp
+application-sse.yml
+application-stdio.yml
 
 HELP.md
 target/
